@@ -46,8 +46,7 @@ $(LIBRARY): $(LIBSLASH) $(OBJS)
 	ar -rcs $@ $(OBJS)
 	cp -r ./include $(OUTPUT)/
 	mv $@ $(OUTPUT)/lib/
-	# make -C example __PERF=$(__PERF)
-	# make -C test __PERF=$(__PERF)
+	make -C example __PERF=$(__PERF)
 
 $(OBJECT): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(INCLUDE_PATH) $(LIB_PATH) -Wl,-Bdynamic $(LIBS)
@@ -56,7 +55,7 @@ $(OBJS): %.o : %.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATH) 
 
 clean: 
-	# make clean -C example
+	make clean -C example
 	rm -rf $(SRC_DIR)/*.o
 	rm -rf $(OUTPUT)/*
 	rm -rf $(OUTPUT)
