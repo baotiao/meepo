@@ -34,6 +34,7 @@ class DBImpl : public DB {
 
   uint64_t file_num_;
 
+  std::string db_path_;
   /*
    * key to DBInode mapping
    */

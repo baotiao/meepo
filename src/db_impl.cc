@@ -7,13 +7,16 @@ namespace bitcask {
 using namespace slash;
 
 DBImpl::DBImpl() :
-  file_num_(0) {
+  file_num_(0),
+  db_path("./db") {
 }
 
 DBImpl::~DBImpl() {
 }
 
 Status DB::Open() {
+
+  CreateDir(path_);
 
 }
 
