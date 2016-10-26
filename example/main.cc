@@ -4,23 +4,22 @@
 #include <fcntl.h>
 
 #include "xdebug.h"
+#include "include/db.h"
+#include "output/include/options.h"
 
 int main()
 {
-  int fd = open("./tt", O_RDWR | O_CREAT | O_TRUNC);
+  bitcask::Options op;
+  
 
-  int mode = FALLOC_FL_KEEP_SIZE;
+  bitcask::DB *db;
+  db = NULL;
+  bitcask::DB::Open(op, "./db", &db);
 
-  off_t offset = 0;
-  off_t len = 1024 * 1024 * 1024 ;
+  // bitcask::WriteOptions wop;
 
-  fallocate(fd, mode, offset, len);
+  // db->Put(wop, "zz", "czzzz");
 
-  write(fd, "heihei", 6);
-
-  log_info("come here");
-
-  close(fd);
 
   return 0;
 }

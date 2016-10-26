@@ -1,10 +1,13 @@
 #ifndef SRC_DB_IMPL_H_
 #define SRC_DB_IMPL_H_
 
-#include <inordered_map>
+#include <unordered_map>
+#include <map>
 
-#include "third/slash/slash_slice.h"
+#include "slash/include/slash_slice.h"
+#include "slash/include/env.h"
 #include "include/db.h"
+#include "include/options.h"
 
 namespace bitcask {
 using namespace slash;
@@ -15,9 +18,13 @@ class DBImpl : public DB {
    * meta data off every record
    */
   struct Meta {
-    uint32_t file_num;
+    uint64_t file_num;
     uint32_t offset;
     uint32_t length;
+    // Meta(uint64_t fn, uint32_t ost, uint32_t sz) :
+    //   file_num(fn),
+    //   offset(ost),
+    //   length(sz) {};
   };
   DBImpl();
   virtual ~DBImpl();
@@ -30,15 +37,25 @@ class DBImpl : public DB {
 
   virtual Status Delete(const WriteOptions& options, 
       const Slice& key);
+
  private:
+
+  std::string NewFileName();
+  std::string NewMetaFile();
 
   uint64_t file_num_;
 
+  std::string now_file_;
+
+  uint32_t offset_;
+
+  WritableFile *writefile_;
   std::string db_path_;
+
   /*
    * key to DBInode mapping
    */
-  inordered_map<std::string, Meta> inodes_;
+  std::map<std::string, Meta> inodes_;
 
 };
 

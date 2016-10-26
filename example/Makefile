@@ -9,16 +9,22 @@ endif
 OBJECT = main
 
 SRC_DIR = ./
+THIRD_PATH = ../third
 
 OUTPUT = ./output
 
 LIB_PATH = -L../ \
-		   -L../output/lib/
+					 -L../output/lib/ \
+					 -L../third/slash/output/lib 
 
 LIBS = -lbitcask \
+			 -lslash \
 			 -lpthread
 
-INCLUDE_PATH = -I../output/include/
+INCLUDE_PATH = -I../output/include/ \
+							 -I../output \
+							 -I../ \
+							 -I$(THIRD_PATH)/
 
 .PHONY: all clean main
 

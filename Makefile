@@ -10,16 +10,16 @@ SRC_DIR = ./src
 THIRD_PATH = ./third
 OUTPUT = ./output
 
-
-INCLUDE_PATH = -I./include/ \
-			   -I./src/ \
-			   -I$(THIRD_PATH)/slash/output/include/
+INCLUDE_PATH = -I./ \
+							 -I./include/ \
+							 -I./src/ \
+							 -I$(THIRD_PATH)/
 
 LIB_PATH = -L./ \
-		   -L$(THIRD_PATH)/slash/output/lib/
+					 -L$(THIRD_PATH)/slash/output/lib/
 
 LIBS = -lpthread \
-	   -lslash
+			 -lslash
 
 LIBRARY = libbitcask.a
 
@@ -29,7 +29,7 @@ BASE_OBJS := $(wildcard $(SRC_DIR)/*.cc)
 OBJS = $(patsubst %.cc,%.o,$(BASE_OBJS))
 
 LIBSLASH = $(THIRD_PATH)/slash/output/lib/libslash.a
-LIBLEVELDB = $(THIRD_PATH)/leveldb/libleveldb.a
+
 $(LIBRARY):  $(LIBPINK) 
 all: $(LIBRARY)
 	@echo "Success, go, go, go..."

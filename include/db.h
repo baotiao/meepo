@@ -1,10 +1,12 @@
 #ifndef INCLUDE_BITCASK_DB_H_
 #define INCLUDE_BITCASK_DB_H_
 
-#include "third/include/slash.h"
+#include "slash/include/slash_slice.h"
+#include "slash/include/slash_status.h"
+
+#include "include/options.h"
 
 namespace bitcask {
-
 using namespace slash;
 class DB {
  public:
