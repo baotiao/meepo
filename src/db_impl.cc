@@ -18,8 +18,8 @@ DB::~DB() {
 
 Status DB::Open(const Options& options, const std::string& name, 
     DB** dbptr) {
-  // DBImpl *impl = new DBImpl();
-
+  Status s;
+  return s;
 }
 
 DBImpl::DBImpl() :

@@ -11,17 +11,16 @@ THIRD_PATH = ./third
 OUTPUT = ./output
 
 INCLUDE_PATH = -I./ \
-							 -I./include/ \
-							 -I./src/ \
 							 -I$(THIRD_PATH)/
 
-LIB_PATH = -L./ \
-					 -L$(THIRD_PATH)/slash/output/lib/
+LIB_PATH = -L$(THIRD_PATH)/slash/output/lib/
 
 LIBS = -lpthread \
 			 -lslash
 
 LIBRARY = libbitcask.a
+
+BT = bt
 
 .PHONY: all clean
 
@@ -30,12 +29,14 @@ OBJS = $(patsubst %.cc,%.o,$(BASE_OBJS))
 
 LIBSLASH = $(THIRD_PATH)/slash/output/lib/libslash.a
 
-$(LIBRARY):  $(LIBPINK) 
-all: $(LIBRARY)
+all: $(BT)
 	@echo "Success, go, go, go..."
 
 $(LIBSLASH):
 	make -C $(THIRD_PATH)/slash/
+
+$(BT): $(SLASH) $(OBJS)
+	  $(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(INCLUDE_PATH) $(LIB_PATH) $(LFLAGS) $(LIBS)
 
 $(LIBRARY): $(LIBSLASH) $(OBJS)
 	rm -rf $(OUTPUT)
@@ -46,7 +47,7 @@ $(LIBRARY): $(LIBSLASH) $(OBJS)
 	ar -rcs $@ $(OBJS)
 	cp -r ./include $(OUTPUT)/
 	mv $@ $(OUTPUT)/lib/
-	make -C example __PERF=$(__PERF)
+	# make -C example __PERF=$(__PERF)
 
 $(OBJECT): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(INCLUDE_PATH) $(LIB_PATH) -Wl,-Bdynamic $(LIBS)
@@ -59,3 +60,4 @@ clean:
 	rm -rf $(SRC_DIR)/*.o
 	rm -rf $(OUTPUT)/*
 	rm -rf $(OUTPUT)
+	rm -rf bt
