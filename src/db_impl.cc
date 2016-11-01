@@ -19,6 +19,18 @@ DB::~DB() {
 Status DB::Open(const Options& options, const std::string& name, 
     DB** dbptr) {
   Status s;
+  *dbptr = NULL;
+  DBImpl *impl = new DBImpl();
+  if (impl == NULL) {
+    printf("impl null");
+    log_info("impl error");
+    return s;
+  } else {
+    printf("impl not null\n");
+  }
+
+  *dbptr = impl;
+
   return s;
 }
 
@@ -29,6 +41,8 @@ DBImpl::DBImpl() :
   CreateDir(db_path_);
   now_file_ = NewFileName();
   NewWritableFile(now_file_, &writefile_);
+  meta_file_ = NewMetaFile();
+  NewWritableFile(meta_file_, &metafile_);
 }
 
 DBImpl::~DBImpl() {
@@ -37,25 +51,34 @@ DBImpl::~DBImpl() {
 
 Status DBImpl::Get(const ReadOptions& option, const Slice& key, 
     std::string* value) {
-
+  Status s;
+  return s;
 }
 
 Status DBImpl::Put(const WriteOptions& options, const Slice& key, 
     const Slice& value) {
-  // Meta meta(file_num_, offset_, static_cast<uint32_t>(value.size()));
-  Meta meta;
-  meta.file_num = file_num_;
-  meta.offset = offset_;
-  meta.length = value.size();
-  inodes_[key.ToString()] = meta;
-  // inodes_.insert(key, meta);
+  Status s;
+  uint32_t sz = value.size();
+  Meta meta1(file_num_, offset_, sz);
+  log_info("meta file_num %d %d", meta1.file_num, meta1.length);
+  // Meta meta;
+  // meta.file_num = file_num_;
+  // meta.offset = offset_;
+  // meta.length = value.size();
+  inodes_[key.ToString()] = meta1;
+  // inodes_.insert(key.ToString(), meta);
   offset_ += value.size();
   writefile_->Append(value);
+  // metafile_->Append(meta);
+
   log_info("write success\n");
+
+  return s;
 }
 
 Status DBImpl::Delete(const WriteOptions& options, const Slice& key) {
-
+  Status s;
+  return s;
 }
 
 std::string DBImpl::NewFileName() {

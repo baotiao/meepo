@@ -18,13 +18,14 @@ class DBImpl : public DB {
    * meta data off every record
    */
   struct Meta {
+    Meta(uint64_t fn, uint32_t ost, uint32_t sz) :
+      file_num(fn),
+      offset(ost),
+      length(sz) {};
+
     uint64_t file_num;
     uint32_t offset;
     uint32_t length;
-    // Meta(uint64_t fn, uint32_t ost, uint32_t sz) :
-    //   file_num(fn),
-    //   offset(ost),
-    //   length(sz) {};
   };
   DBImpl();
   virtual ~DBImpl();
@@ -46,10 +47,13 @@ class DBImpl : public DB {
   uint64_t file_num_;
 
   std::string now_file_;
+  std::string meta_file_;
 
   uint32_t offset_;
 
   WritableFile *writefile_;
+  WritableFile *metafile_;
+
   std::string db_path_;
 
   /*
