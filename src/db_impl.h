@@ -8,25 +8,17 @@
 #include "slash/include/env.h"
 #include "include/db.h"
 #include "include/options.h"
+#include "include/meta.h"
+
 
 namespace bitcask {
+
+class Meta;
+
 using namespace slash;
 
 class DBImpl : public DB {
  public:
-  /*
-   * meta data off every record
-   */
-  struct Meta {
-    Meta(uint64_t fn, uint32_t ost, uint32_t sz) :
-      file_num(fn),
-      offset(ost),
-      length(sz) {};
-
-    uint64_t file_num;
-    uint32_t offset;
-    uint32_t length;
-  };
   DBImpl();
   virtual ~DBImpl();
 
@@ -39,12 +31,20 @@ class DBImpl : public DB {
   virtual Status Delete(const WriteOptions& options, 
       const Slice& key);
 
+  virtual Status ListKeys(const ReadOptions& options); 
+
+  virtual Status Merge();
+
+  virtual Status Sync();
+  
+
  private:
 
   std::string NewFileName();
   std::string NewMetaFile();
+  std::string ReadFileName(const uint32_t sst_num);
 
-  uint64_t file_num_;
+  uint32_t file_num_;
 
   std::string now_file_;
   std::string meta_file_;
@@ -54,12 +54,17 @@ class DBImpl : public DB {
   WritableFile *writefile_;
   WritableFile *metafile_;
 
+  SequentialFile *readfile_;
+
   std::string db_path_;
 
   /*
    * key to DBInode mapping
    */
-  std::map<std::string, Meta> inodes_;
+  std::unordered_map<std::string, Meta> inodes_;
+
+  DBImpl(const DBImpl&);
+  void operator =(const DBImpl&);
 
 };
 

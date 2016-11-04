@@ -15,7 +15,7 @@ class DB {
   static Status Open(const Options& options, const std::string& name, 
       DB** dbptr);
 
-  virtual Status Get(const ReadOptions& option, const Slice& key, 
+  virtual Status Get(const ReadOptions& options, const Slice& key, 
       std::string* value) = 0;
 
   virtual Status Put(const WriteOptions& options, const Slice& key, 
@@ -23,6 +23,12 @@ class DB {
 
   virtual Status Delete(const WriteOptions& options, 
       const Slice& key) = 0;
+
+  virtual Status ListKeys(const ReadOptions& options) = 0; 
+
+  virtual Status Merge() = 0;
+
+  virtual Status Sync() = 0;
   
  private:
   DB(const DB&);

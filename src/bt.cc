@@ -20,6 +20,7 @@ int main()
   slash::Status s = bitcask::DB::Open(op, db_name, &db);
 
   const bitcask::WriteOptions wop;
+  const bitcask::ReadOptions rop;
 
   std::string key("aaa");
   std::string val("bbb");
@@ -28,15 +29,17 @@ int main()
     printf("db error\n");
     return -1;
   }
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
-  s = db->Put(wop, key, val);
+  std::string value;
+  Slice s1("c");
+  for (int i = 0; i < 100000000; i++) {
+    s = db->Put(wop, "a", "b");
+    s = db->Put(wop, "c", "d");
+    s = db->Put(wop, "e", "f");
+    s = db->Get(rop, s1, &value);
+  }
+
+
+  printf("%s\n", value.c_str());
 
   delete db;
 
