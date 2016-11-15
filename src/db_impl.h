@@ -61,8 +61,9 @@ class DBImpl : public DB {
   /*
    * key to DBInode mapping
    */
-  std::unordered_map<std::string, Meta> inodes_;
+  std::unordered_map<std::string, Meta *> inodes_;
 
+  std::vector<SequentialFile *> file_table_;
   DBImpl(const DBImpl&);
   void operator =(const DBImpl&);
 

@@ -20,11 +20,18 @@ class Meta {
     offset_(offset),
     length_(length) {};
 
+  void operator=(const Meta& rval) {
+    key_ = rval.key();
+    key_len_ = rval.key_len();
+    file_num_ = rval.file_num();
+    length_ = rval.length();
+  }
   std::string ToString() const {
     char buf[100];
     snprintf(buf, sizeof(buf), "%u%u%u", file_num_, offset_, length_);
     return buf;
   };
+
 
   std::string key() const {
     return key_;
@@ -40,6 +47,10 @@ class Meta {
   
   uint32_t length() const {
     return length_;
+  }
+
+  uint32_t key_len() const {
+    return key_len_;
   }
 
   void EncodeTo(std::string *dst) const;

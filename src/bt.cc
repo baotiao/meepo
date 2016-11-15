@@ -31,19 +31,30 @@ int main()
   }
   std::string value;
   Slice s1("c");
+  std::string key1;
   for (int i = 0; i < 100000000; i++) {
-    s = db->Put(wop, "a", "b");
-    s = db->Put(wop, "c", "d");
-    s = db->Put(wop, "e", "f");
-    s = db->Get(rop, s1, &value);
+    key1 = "key";
+    key1.append((char *)(&i), 4);
+    s = db->Put(wop, key1, "feqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfdsazxvbnmpoiufeqwertyuioplkhgfd");
+    // printf("%s \n", s.ToString().c_str());
+    // s = db->Put(wop, "c", "d");
+    // s = db->Put(wop, "e", "f");
+    // s = db->Get(rop, s1, &value);
   }
 
+  // for (int i = 0; i < 10000000; i++) {
+  //   s = db->Get(rop, std::to_string(i), &value);
+  //   // s = db->Put(wop, "c", "d");
+  //   // s = db->Put(wop, "e", "f");
+  //   // s = db->Get(rop, s1, &value);
+  // }
 
-  printf("%s\n", value.c_str());
+
+  // printf("%s\n", value.c_str());
 
   delete db;
 
-  printf("success\n");
+  // printf("success\n");
 
   return 0;
 }

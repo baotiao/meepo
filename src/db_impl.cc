@@ -39,6 +39,7 @@ DBImpl::DBImpl() :
   file_num_(0),
   offset_(0),
   db_path_("./db") {
+  inodes_.reserve(10000000);
   CreateDir(db_path_);
   now_file_ = NewFileName();
   NewWritableFile(now_file_, &writefile_);
@@ -54,27 +55,33 @@ DBImpl::~DBImpl() {
 Status DBImpl::Get(const ReadOptions& option, const Slice& key, 
     std::string* value) {
   Status s;
-  std::unordered_map<std::string, Meta>::iterator iter;
+  std::unordered_map<std::string, Meta *>::iterator iter;
   iter = inodes_.find(key.ToString());
   if (iter == inodes_.end()) {
     return s; 
   }
 
   
-  std::string read_file_ = ReadFileName((iter->second).file_num());
-  log_info("%s", read_file_.c_str());
-  s = NewSequentialFile(read_file_, &readfile_);
+  std::string read_file_ = ReadFileName((iter->second)->file_num());
+  // log_info("%s %u", read_file_.c_str(), (iter->second)->file_num());
+  if (file_table_.size() <= (iter->second)->file_num()) {
+    s = NewSequentialFile(read_file_, &readfile_);
+    file_table_.push_back(readfile_);
+    // file_table_[(iter->second).file_num()] = readfile_;
+  } else {
+    readfile_ = file_table_[(iter->second)->file_num()];
+  }
   log_info("status info %s", s.ToString().c_str());
-  printf("%u ", (iter->second).offset());
+  // printf("%u ", (iter->second).offset());
 
-  readfile_->Skip((iter->second).offset());
+  readfile_->Skip((iter->second)->offset());
 
   slash::Slice *res = new Slice();
   char *scratch = (char *)malloc(10240 * sizeof(char *)); 
 
-  readfile_->Read((iter->second).length(), res, scratch);
+  readfile_->Read((iter->second)->length(), res, scratch);
   log_info("%s", res->ToString().c_str());
-  delete(readfile_);
+  // delete(readfile_);
   
   return s;
 }
@@ -83,16 +90,17 @@ Status DBImpl::Put(const WriteOptions& options, const Slice& key,
     const Slice& value) {
   Status s;
   uint32_t sz = value.size();
-  Meta meta(key.ToString(), file_num_, offset_, sz);
-  inodes_[key.ToString()] = meta;
+  Meta *p = new Meta(key.ToString(), file_num_, offset_, sz);
+  inodes_.insert({key.ToString(), p});
+  // inodes_[key.ToString()] = p;
   offset_ += value.size();
   writefile_->Append(value);
-  std::string *p = new std::string();
-  meta.EncodeTo(p);
-  metafile_->Append(*p);
-  metafile_->Append(meta.key());
+  // std::string *p = new std::string();
+  // meta.EncodeTo(p);
+  // metafile_->Append(*p);
+  // metafile_->Append(meta.key());
 
-  log_info("write success\n");
+  // log_info("write success\n");
 
   return s;
 }

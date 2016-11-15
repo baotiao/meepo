@@ -1,2 +1,3 @@
-# bitcask
-an embeddable, persistent, fast key-value storage engine
+# picDB
+an embeddable, persistent, fast key-value storage engine optimize for storing
+picture
